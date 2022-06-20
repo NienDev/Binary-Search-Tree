@@ -1,10 +1,12 @@
 #include <iostream>
 #include <limits.h>
 #include<queue>
+#include<stack>
 using std::cout;
 using std::endl;
 using std::queue;
 using std::max;
+using std::stack;
 
 struct NODE{
 	int key;
@@ -59,6 +61,53 @@ void LNR(NODE* pRoot){
 	if (pRoot->left) LNR(pRoot->left);
 	cout << pRoot->key << ' ';
 	if (pRoot->right) LNR(pRoot->right);
+}
+
+void LNR_Iteratively(NODE* pRoot){
+	stack<NODE*> s;
+	NODE* cur = pRoot;
+	while (cur || !s.empty()){
+		if (cur){
+			s.push(cur);
+			cur = cur->left;
+		}else{
+			cur = s.top();
+			s.pop();
+			cout << cur->key << ' '; 
+			cur = cur->right;
+		}
+	}
+}
+
+void NLR_Iteratively(NODE* pRoot){
+	stack<NODE*> s;
+	s.push(pRoot);
+	while (!s.empty()){
+		NODE* tmp = s.top();
+		s.pop();
+		cout << tmp->key << ' ';
+		if (tmp->right) s.push(tmp->right);
+		if (tmp->left) s.push(tmp->left);
+	}
+}
+
+void LRN_Iteratively(NODE* pRoot){
+	stack<NODE*> s;
+	stack<int> result;
+	s.push(pRoot);
+	
+	while (!s.empty()){
+		NODE* cur = s.top();
+		result.push(cur->key);
+		s.pop();
+		if (cur->left) s.push(cur->left);
+		if (cur->right) s.push(cur->right);
+	}
+	
+	while (!result.empty()){
+		cout << result.top() << ' ';
+		result.pop();
+	}
 }
 
 void NLR(NODE* pRoot){
@@ -322,4 +371,27 @@ int main(){
 	if (!isBST(tmp, INT_MIN, INT_MAX)) cout << "false"; else cout <<"true" << endl;
 	cout << endl;
 	cout << (isFullBT(tmp) && isBST(tmp, INT_MIN, INT_MAX));
+	cout << endl;
+	cout << endl;
+	LNR_Iteratively(BST);
+	cout << endl;
+	NLR_Iteratively(BST);
+	cout << endl;
+	LRN_Iteratively(BST);
+	
+	cout << endl;
+	
+	NODE* BST3 = nullptr;
+	int b[] = {4,3,7,1,5,2,10,8};
+	BST3 = createTree(b, 8); 
+	
+	cout << endl;
+	cout << endl;
+	LNR_Iteratively(BST3);
+	cout << endl;
+	NLR_Iteratively(BST3);
+	cout << endl;
+	LRN_Iteratively(BST3);
+	cout << endl;
+	
 }
